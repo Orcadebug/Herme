@@ -6,10 +6,6 @@ A concise and versatile group intelligence engine that predicts everything.
 
 **Rehearse the future in a digital sandbox, and win decisions after countless simulations.**
 
-[![GitHub Stars](https://img.shields.io/github/stars/Orcadebug/Hermes?style=flat-square&color=DAA520)](https://github.com/Orcadebug/Hermes/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/Orcadebug/Hermes?style=flat-square)](https://github.com/Orcadebug/Hermes/network)
-[![Docker](https://img.shields.io/badge/Docker-Build-2496ED?style=flat-square&logo=docker&logoColor=white)](https://hub.docker.com/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](./LICENSE)
 
 </div>
 
