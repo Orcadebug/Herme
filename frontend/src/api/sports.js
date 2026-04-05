@@ -51,3 +51,23 @@ export const getSportsReport = (params) => {
 export const chatWithSportsPersona = (data) => {
   return service.post('/api/sports/game/chat', data)
 }
+
+export const getSportsReactions = (workspaceId, params) => {
+  return service.get(`/api/sports/game/reactions/${workspaceId}`, { params })
+}
+
+export const getSportsPregame = (workspaceId) => {
+  return service.get(`/api/sports/game/pregame/${workspaceId}`)
+}
+
+export const generateSportsPregame = (workspaceId) => {
+  return service.post(`/api/sports/game/pregame/${workspaceId}`)
+}
+
+export const getSportsPostgame = (workspaceId) => {
+  return service.get(`/api/sports/game/postgame/${workspaceId}`)
+}
+
+export const generateSportsPostgame = (workspaceId) => {
+  return service.post(`/api/sports/game/postgame/${workspaceId}`)
+}
