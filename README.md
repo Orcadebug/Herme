@@ -314,7 +314,7 @@ Hermes/
 
 ## Acknowledgments
 
-Hermes is inspired by **[MiroFish](https://github.com/666ghj/Hermes)** -- a concise and versatile group intelligence engine that predicts everything. We thank the original creators for the foundational work and vision.
+We would like to sincerely thank **[MiroFish](https://github.com/666ghj/Hermes)** for inspiring this project. Their vision of a concise and versatile group intelligence engine laid the foundation for Hermes.
 
 Hermes's simulation engine is powered by **[OASIS (Open Agent Social Interaction Simulations)](https://github.com/camel-ai/oasis)**. We sincerely thank the CAMEL-AI team for their open-source contributions!
 
