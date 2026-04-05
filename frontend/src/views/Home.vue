@@ -1,201 +1,182 @@
 <template>
-  <div class="home-shell">
-    <!-- Top Navigation Bar -->
-    <nav class="top-nav">
-      <div class="nav-brand">
-        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20M2 12h20"/>
-        </svg>
-        <span class="brand-text">HERMES</span>
-      </div>
-      <p class="nav-tagline">Simulate Any Game. Every Player. Every Play.</p>
-      <div class="nav-actions">
-        <a href="https://github.com/Orcadebug/Hermes" target="_blank" class="nav-link">GitHub ↗</a>
-        <LanguageSwitcher />
+  <div class="page">
+
+    <!-- Nav -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="/" class="wordmark">HERMES</a>
+        <div class="nav-right">
+          <span class="nav-tag">Sports Simulation Engine</span>
+          <a href="https://github.com/Orcadebug/Hermes" target="_blank" rel="noopener" class="nav-link">
+            GitHub
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          </a>
+          <LanguageSwitcher />
+        </div>
       </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="hero">
-      <div class="hero-content">
-        <h1 class="hero-headline">
+      <div class="container">
+        <p class="eyebrow">AI-Powered · Play-by-Play</p>
+        <h1 class="headline">
           Simulate Any Game.<br />
-          <span class="accent-text">Every Player. Every Play.</span>
+          <span class="headline-accent">Every Player. Every Play.</span>
         </h1>
-        <p class="hero-sub">
-          Hermes uses AI agents to run full game simulations — every player, coach, and fan acting autonomously. Powered by live research data.
+        <p class="hero-desc">
+          Hermes deploys autonomous AI agents for every player, coach, and fan — running full game simulations powered by live research data.
         </p>
-        <div class="hero-stats">
-          <div class="stat-card">
-            <span class="stat-number" :class="{ 'counting': animating }">{{ sportsCount }}</span>
+        <div class="stats-row">
+          <div class="stat">
+            <span class="stat-num">{{ sportsCount }}</span>
             <span class="stat-label">Sports</span>
           </div>
-          <div class="stat-divider"></div>
-          <div class="stat-card">
-            <span class="stat-number" :class="{ 'counting': animating }">{{ agentRolesCount }}+</span>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <span class="stat-num">{{ agentRolesCount }}+</span>
             <span class="stat-label">Agent Roles</span>
           </div>
-          <div class="stat-divider"></div>
-          <div class="stat-card">
-            <span class="stat-number" :class="{ 'counting': animating }">{{ accuracyCount }}%</span>
-            <span class="stat-label">Play-by-Play Accuracy</span>
+          <div class="stat-sep"></div>
+          <div class="stat">
+            <span class="stat-num">{{ accuracyCount }}%</span>
+            <span class="stat-label">Accuracy</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sport Selector Grid -->
-    <section class="sport-grid">
-      <h2 class="section-title">Choose Your Sport</h2>
-      <div class="sport-cards">
-        <div
-          v-for="sport in sports"
-          :key="sport.id"
-          class="sport-card"
-          @click="selectSport(sport.id)"
-        >
-          <div class="sport-icon" v-html="sport.icon"></div>
-          <h3 class="sport-name">{{ sport.name }}</h3>
-          <p class="sport-desc">{{ sport.description }}</p>
-          <button class="sport-btn" @click.stop="simulateSport(sport.id)">Simulate</button>
+    <div class="divider"></div>
+
+    <!-- Sport Selector -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Choose Your Sport</h2>
+        <div class="sport-grid">
+          <div
+            v-for="sport in sports"
+            :key="sport.id"
+            class="sport-card"
+            :class="{ 'sport-card--active': form.sport === sport.id }"
+            @click="selectSport(sport.id)"
+          >
+            <div class="sport-icon" v-html="sport.icon"></div>
+            <div class="sport-body">
+              <h3 class="sport-name">{{ sport.name }}</h3>
+              <p class="sport-desc">{{ sport.description }}</p>
+            </div>
+            <button class="btn-outline" @click.stop="simulateSport(sport.id)">Simulate</button>
+          </div>
         </div>
       </div>
     </section>
 
+    <div class="divider"></div>
+
     <!-- Quick Simulation Form -->
-    <section class="sim-form">
-      <h2 class="section-title">Quick Simulation</h2>
-      <div class="form-grid">
-        <div class="form-row">
-          <label class="input-group">
-            <span class="input-label">Home Team</span>
-            <input
-              v-model="form.homeTeam"
-              placeholder="e.g. Lakers"
-              class="text-input"
-            />
-          </label>
-          <label class="input-group">
-            <span class="input-label">Away Team</span>
-            <input
-              v-model="form.awayTeam"
-              placeholder="e.g. Celtics"
-              class="text-input"
-            />
-          </label>
+    <section class="section">
+      <div class="container container--narrow">
+        <h2 class="section-title">Quick Simulation</h2>
+        <div class="form-card">
+          <div class="form-row">
+            <label class="field">
+              <span class="field-label">Home Team</span>
+              <input v-model="form.homeTeam" placeholder="e.g. Lakers" class="field-input" />
+            </label>
+            <label class="field">
+              <span class="field-label">Away Team</span>
+              <input v-model="form.awayTeam" placeholder="e.g. Celtics" class="field-input" />
+            </label>
+          </div>
+          <div class="form-row">
+            <label class="field">
+              <span class="field-label">Sport</span>
+              <select v-model="form.sport" class="field-input">
+                <option value="">Select a sport</option>
+                <option value="basketball">Basketball</option>
+                <option value="soccer">Soccer</option>
+                <option value="football">American Football</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">League <span class="field-optional">(optional)</span></span>
+              <input v-model="form.league" placeholder="e.g. NBA, Premier League" class="field-input" />
+            </label>
+          </div>
+          <div class="form-footer">
+            <button
+              class="btn-cta"
+              @click="startSimulation"
+              :disabled="!canSimulate || loading"
+            >
+              {{ loading ? 'Starting...' : 'Simulate Now' }}
+            </button>
+            <p v-if="error" class="error-msg">{{ error }}</p>
+          </div>
         </div>
-        <div class="form-row">
-          <label class="input-group">
-            <span class="input-label">Sport</span>
-            <select v-model="form.sport" class="text-input">
-              <option value="">Select a sport</option>
-              <option value="basketball">Basketball</option>
-              <option value="soccer">Soccer</option>
-              <option value="football">American Football</option>
-            </select>
-          </label>
-          <label class="input-group">
-            <span class="input-label">League (Optional)</span>
-            <input
-              v-model="form.league"
-              placeholder="e.g. NBA, Premier League"
-              class="text-input"
-            />
-          </label>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Recent Simulations -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Recent Simulations</h2>
+          <button class="btn-ghost" @click="loadHistory" :disabled="historyLoading">
+            {{ historyLoading ? 'Loading…' : 'Refresh' }}
+          </button>
         </div>
-        <div class="form-actions">
+        <div v-if="historyLoading" class="empty-state">Loading…</div>
+        <div v-else-if="history.length === 0" class="empty-state">
+          No simulations yet. Start your first game above.
+        </div>
+        <div v-else class="sim-list">
           <button
-            class="cta-btn"
-            @click="startSimulation"
-            :disabled="!canSimulate || loading"
+            v-for="sim in history"
+            :key="sim.id"
+            class="sim-item"
+            @click="router.push({ name: 'SportsProcess', params: { workspaceId: sim.id } })"
           >
-            {{ loading ? 'Starting...' : 'Simulate Now' }}
+            <span class="sim-sport">{{ sim.sport }}</span>
+            <div class="sim-match">
+              <span class="sim-team">{{ sim.homeTeam }}</span>
+              <span class="sim-score">{{ sim.homeScore }} – {{ sim.awayScore }}</span>
+              <span class="sim-team">{{ sim.awayTeam }}</span>
+            </div>
+            <span class="sim-date">{{ sim.date }}</span>
           </button>
         </div>
       </div>
-      <p v-if="error" class="error-text">{{ error }}</p>
     </section>
 
-    <!-- Recent Simulations -->
-    <section class="recent-sims">
-      <div class="section-header">
-        <h2 class="section-title">Recent Simulations</h2>
-        <button class="refresh-btn" @click="loadHistory" :disabled="historyLoading">
-          {{ historyLoading ? 'Loading...' : 'Refresh' }}
-        </button>
-      </div>
-      <div v-if="historyLoading" class="history-empty">Loading recent simulations...</div>
-      <div v-else-if="history.length === 0" class="history-empty">No simulations yet. Start your first game above.</div>
-      <div v-else class="sim-scroll">
-        <button
-          v-for="sim in history"
-          :key="sim.id"
-          class="sim-card"
-          @click="router.push({ name: 'SportsProcess', params: { workspaceId: sim.id } })"
-        >
-          <span class="sim-badge">{{ sim.sport }}</span>
-          <div class="sim-teams">
-            <span class="team">{{ sim.homeTeam }}</span>
-            <span class="score">{{ sim.homeScore }} - {{ sim.awayScore }}</span>
-            <span class="team">{{ sim.awayTeam }}</span>
-          </div>
-          <span class="sim-date">{{ sim.date }}</span>
-        </button>
-      </div>
-    </section>
+    <div class="divider"></div>
 
     <!-- How It Works -->
-    <section class="how-it-works">
-      <h2 class="section-title">How It Works</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
+    <section class="section section--last">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+          <div class="step" v-for="(step, i) in steps" :key="i">
+            <span class="step-num">0{{ i + 1 }}</span>
+            <div class="step-icon" v-html="step.icon"></div>
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-desc">{{ step.desc }}</p>
           </div>
-          <h3>Research Teams</h3>
-          <p>Gather live data on rosters, stats, and strategies.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-              <circle cx="9" cy="7" r="4"/>
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-          </div>
-          <h3>Build Agent Profiles</h3>
-          <p>Every player, coach, and fan becomes an autonomous AI agent.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-          </div>
-          <h3>Simulate Game</h3>
-          <p>Watch the full game unfold play by play in real time.</p>
-        </div>
-        <div class="step-arrow">→</div>
-        <div class="step">
-          <div class="step-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-              <polyline points="7 10 12 15 17 10"/>
-              <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-          </div>
-          <h3>Watch & Analyze</h3>
-          <p>Deep-dive into stats, replays, and agent decision logs.</p>
         </div>
       </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <span class="footer-brand">HERMES</span>
+        <span class="footer-copy">Simulate Any Game. Every Player. Every Play.</span>
+        <a href="https://github.com/Orcadebug/Hermes" target="_blank" rel="noopener" class="footer-link">GitHub ↗</a>
+      </div>
+    </footer>
+
   </div>
 </template>
 
@@ -206,71 +187,79 @@ import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
 const router = useRouter()
 
-// Animated stats
 const sportsCount = ref(0)
 const agentRolesCount = ref(0)
 const accuracyCount = ref(0)
-const animating = ref(false)
 
-const form = ref({
-  homeTeam: '',
-  awayTeam: '',
-  sport: '',
-  league: ''
-})
-
+const form = ref({ homeTeam: '', awayTeam: '', sport: '', league: '' })
 const loading = ref(false)
 const historyLoading = ref(false)
 const error = ref('')
 const history = ref([])
 
-const canSimulate = computed(() => {
-  return form.value.homeTeam.trim() && form.value.awayTeam.trim() && form.value.sport
-})
+const canSimulate = computed(() =>
+  form.value.homeTeam.trim() && form.value.awayTeam.trim() && form.value.sport
+)
 
 const sports = [
   {
     id: 'basketball',
     name: 'Basketball',
     description: 'Full-court action with player-by-player autonomy, shot selection, and defensive schemes.',
-    icon: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="32" cy="32" r="28"/>
-      <path d="M32 4v56M4 32h56M12 12c10 8 16 20 16 20s6-12 16-20M12 52c10-8 16-20 16-20s6 12 16 20"/>
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20M2 12h20"/>
     </svg>`
   },
   {
     id: 'soccer',
     name: 'Soccer',
     description: '11v11 tactical simulation with formations, pressing, and set-piece strategies.',
-    icon: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="32" cy="32" r="28"/>
-      <polygon points="32,12 42,22 38,34 26,34 22,22"/>
-      <line x1="32" y1="12" x2="32" y2="4"/>
-      <line x1="42" y1="22" x2="50" y2="18"/>
-      <line x1="38" y1="34" x2="44" y2="42"/>
-      <line x1="26" y1="34" x2="20" y2="42"/>
-      <line x1="22" y1="22" x2="14" y2="18"/>
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M12 2l3.09 9.26H22l-6.18 4.49L18 22l-6-4.36L6 22l2.18-6.25L2 11.26h6.91z"/>
     </svg>`
   },
   {
     id: 'football',
     name: 'American Football',
     description: 'Down-by-down play calling with route trees, blocking schemes, and defensive reads.',
-    icon: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
-      <ellipse cx="32" cy="32" rx="28" ry="16" transform="rotate(-30 32 32)"/>
-      <line x1="32" y1="16" x2="32" y2="48"/>
-      <line x1="24" y1="20" x2="24" y2="44"/>
-      <line x1="40" y1="20" x2="40" y2="44"/>
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <ellipse cx="12" cy="12" rx="10" ry="6" transform="rotate(-30 12 12)"/>
+      <line x1="12" y1="6" x2="12" y2="18"/>
+      <line x1="9" y1="7.5" x2="9" y2="16.5"/>
+      <line x1="15" y1="7.5" x2="15" y2="16.5"/>
     </svg>`
   }
 ]
 
-const selectSport = (sportId) => {
-  form.value.sport = sportId
-}
+const steps = [
+  {
+    title: 'Research Teams',
+    desc: 'Gather live data on rosters, stats, and strategies.',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`
+  },
+  {
+    title: 'Build Agent Profiles',
+    desc: 'Every player, coach, and fan becomes an autonomous AI agent.',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+  },
+  {
+    title: 'Simulate Game',
+    desc: 'Watch the full game unfold play by play in real time.',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>`
+  },
+  {
+    title: 'Watch & Analyze',
+    desc: 'Deep-dive into stats, replays, and agent decision logs.',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
+  }
+]
 
-const simulateSport = (sportId) => {
-  form.value.sport = sportId
+const selectSport = (id) => { form.value.sport = id }
+
+const simulateSport = (id) => {
+  form.value.sport = id
   startSimulation()
 }
 
@@ -298,7 +287,7 @@ const loadHistory = async () => {
   historyLoading.value = true
   try {
     history.value = []
-  } catch (err) {
+  } catch {
     history.value = []
   } finally {
     historyLoading.value = false
@@ -306,23 +295,17 @@ const loadHistory = async () => {
 }
 
 const animateStats = () => {
-  animating.value = true
   const targets = { sports: 3, agents: 50, accuracy: 94 }
-  const duration = 1500
   const steps = 60
-  const interval = duration / steps
-
+  const interval = 1500 / steps
   let step = 0
   const timer = setInterval(() => {
     step++
-    const progress = step / steps
-    sportsCount.value = Math.round(targets.sports * progress)
-    agentRolesCount.value = Math.round(targets.agents * progress)
-    accuracyCount.value = Math.round(targets.accuracy * progress)
-    if (step >= steps) {
-      clearInterval(timer)
-      animating.value = false
-    }
+    const p = step / steps
+    sportsCount.value = Math.round(targets.sports * p)
+    agentRolesCount.value = Math.round(targets.agents * p)
+    accuracyCount.value = Math.round(targets.accuracy * p)
+    if (step >= steps) clearInterval(timer)
   }, interval)
 }
 
@@ -333,252 +316,217 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.home-shell {
-  --bg-primary: #0a1628;
-  --bg-card: #132238;
-  --bg-card-hover: #1a2d4a;
-  --accent-blue: #0078ff;
-  --accent-orange: #ff6b35;
-  --text-primary: #ffffff;
-  --text-secondary: #8899aa;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(0, 120, 255, 0.3);
-  --glow-blue: rgba(0, 120, 255, 0.15);
-  --glow-orange: rgba(255, 107, 53, 0.15);
-}
-
-.home-shell {
+/* ── Layout ── */
+.page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #0a1628 0%, #0d1f3c 50%, #0a1628 100%);
-  color: var(--text-primary);
-  padding: 0;
-  font-family: 'JetBrains Mono', 'Space Grotesk', 'Noto Sans SC', monospace;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
 }
 
-/* Top Navigation */
-.top-nav {
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.container--narrow {
+  max-width: 720px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+}
+
+.section {
+  padding: 64px 0;
+}
+
+.section--last {
+  padding-bottom: 80px;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.section-header .section-title {
+  margin-bottom: 0;
+}
+
+/* ── Nav ── */
+.nav {
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 100;
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 32px;
-  background: rgba(10, 22, 40, 0.95);
-  border-bottom: 1px solid var(--border-subtle);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(12px);
 }
 
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.brand-icon {
-  width: 28px;
-  height: 28px;
-  color: var(--accent-blue);
-}
-
-.brand-text {
+.wordmark {
+  font-family: var(--font-display);
   font-size: 22px;
   font-weight: 800;
-  letter-spacing: 0.1em;
-  background: linear-gradient(135deg, var(--accent-blue), #00c6ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  cursor: pointer;
 }
 
-.nav-tagline {
-  color: var(--text-secondary);
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-tag {
   font-size: 13px;
+  color: var(--muted);
   letter-spacing: 0.02em;
 }
 
-.nav-actions {
+.nav-link {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-
-.nav-link {
-  color: var(--text-secondary);
-  text-decoration: none;
+  gap: 4px;
   font-size: 14px;
-  transition: color 0.2s;
+  font-weight: 500;
+  color: var(--muted);
+  transition: color var(--transition);
 }
 
 .nav-link:hover {
-  color: var(--text-primary);
+  color: var(--text);
 }
 
-/* Hero Section */
+/* ── Hero ── */
 .hero {
-  padding: 80px 32px 60px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+  padding: 96px 0 80px;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, var(--glow-blue) 0%, transparent 70%);
-  pointer-events: none;
-  animation: pulse 4s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
-  50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.hero-headline {
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 800;
-  line-height: 1.1;
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
   margin-bottom: 20px;
-  animation: fadeInUp 0.6s ease-out;
 }
 
-.accent-text {
-  background: linear-gradient(135deg, var(--accent-orange), #ff9a5c);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.headline {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
 }
 
-.hero-sub {
+.headline-accent {
+  color: var(--muted);
+}
+
+.hero-desc {
   font-size: 18px;
-  color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto 40px;
-  line-height: 1.6;
-  animation: fadeInUp 0.6s ease-out 0.2s both;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 48px;
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-stats {
+.stats-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 32px;
-  animation: fadeInUp 0.6s ease-out 0.4s both;
+  gap: 40px;
 }
 
-.stat-card {
+.stat {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 4px;
 }
 
-.stat-number {
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--accent-blue);
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 700;
   line-height: 1;
-}
-
-.stat-number.counting {
-  animation: countPulse 0.3s ease-in-out;
-}
-
-@keyframes countPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  color: var(--text);
 }
 
 .stat-label {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+  color: var(--subtle);
 }
 
-.stat-divider {
+.stat-sep {
   width: 1px;
-  height: 48px;
-  background: var(--border-subtle);
+  height: 40px;
+  background: var(--border);
 }
 
-/* Section Titles */
-.section-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 24px;
-  color: var(--text-primary);
-}
-
-/* Sport Grid */
+/* ── Sport Cards ── */
 .sport-grid {
-  padding: 40px 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.sport-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.sport-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 28px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 
-.sport-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--glow-blue), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
+.sport-card {
+  background: var(--bg);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  cursor: pointer;
+  transition: background var(--transition);
 }
 
-.sport-card:hover {
-  border-color: var(--border-accent);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 32px var(--glow-blue);
+.sport-card:hover,
+.sport-card--active {
+  background: var(--surface);
 }
 
-.sport-card:hover::before {
-  opacity: 1;
+.sport-card--active .sport-name {
+  color: var(--gold);
 }
 
 .sport-icon {
-  width: 56px;
-  height: 56px;
-  margin: 0 auto 16px;
-  color: var(--accent-blue);
-  position: relative;
-  z-index: 1;
+  width: 32px;
+  height: 32px;
+  color: var(--subtle);
 }
 
 .sport-icon svg {
@@ -586,292 +534,277 @@ onMounted(async () => {
   height: 100%;
 }
 
+.sport-body {
+  flex: 1;
+}
+
 .sport-name {
+  font-family: var(--font-display);
   font-size: 20px;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   margin-bottom: 8px;
-  position: relative;
-  z-index: 1;
+  transition: color var(--transition);
 }
 
 .sport-desc {
   font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 20px;
-  position: relative;
-  z-index: 1;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
-.sport-btn {
-  background: var(--accent-blue);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 24px;
-  font-size: 14px;
+/* ── Buttons ── */
+.btn-outline {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 20px;
+  font-size: 13px;
   font-weight: 600;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.btn-outline:hover {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
   cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  z-index: 1;
 }
 
-.sport-btn:hover {
-  background: #0066dd;
-  box-shadow: 0 4px 16px var(--glow-blue);
+.btn-cta {
+  background: var(--gold);
+  color: #000;
+  border: none;
+  padding: 14px 40px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius);
+  transition: background var(--transition), transform var(--transition);
 }
 
-/* Quick Simulation Form */
-.sim-form {
-  padding: 40px 32px;
-  max-width: 800px;
-  margin: 0 auto;
+.btn-cta:hover:not(:disabled) {
+  background: var(--gold-hover);
+  transform: translateY(-1px);
 }
 
-.form-grid {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 28px;
+.btn-cta:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius);
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--subtle);
+  color: var(--text);
+}
+
+/* ── Form ── */
+.form-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 20px;
 }
 
-.input-group {
+.field {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.input-label {
-  font-size: 13px;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.text-input {
-  background: rgba(10, 22, 40, 0.6);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  padding: 12px 16px;
-  color: var(--text-primary);
-  font: inherit;
-  font-size: 15px;
-  transition: border-color 0.2s;
-}
-
-.text-input:focus {
-  outline: none;
-  border-color: var(--accent-blue);
-}
-
-.text-input::placeholder {
-  color: var(--text-secondary);
-}
-
-.text-input option {
-  background: var(--bg-card);
-  color: var(--text-primary);
-}
-
-.form-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
-}
-
-.cta-btn {
-  background: var(--accent-orange);
-  color: var(--text-primary);
-  border: none;
-  border-radius: 10px;
-  padding: 14px 40px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.cta-btn:hover:not(:disabled) {
-  background: #e85a28;
-  box-shadow: 0 6px 24px var(--glow-orange);
-  transform: translateY(-2px);
-}
-
-.cta-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.error-text {
-  margin-top: 12px;
-  color: #ff4d4d;
-  font-size: 14px;
-  text-align: center;
-}
-
-/* Recent Simulations */
-.recent-sims {
-  padding: 40px 32px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.refresh-btn {
-  background: none;
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font: inherit;
-  font-size: 13px;
-  transition: all 0.2s;
-}
-
-.refresh-btn:hover {
-  border-color: var(--accent-blue);
-  color: var(--text-primary);
-}
-
-.sim-scroll {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-  scroll-snap-type: x mandatory;
-}
-
-.sim-scroll::-webkit-scrollbar {
-  height: 6px;
-}
-
-.sim-scroll::-webkit-scrollbar-track {
-  background: var(--bg-card);
-  border-radius: 3px;
-}
-
-.sim-scroll::-webkit-scrollbar-thumb {
-  background: var(--accent-blue);
-  border-radius: 3px;
-}
-
-.sim-card {
-  flex: 0 0 280px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
-  scroll-snap-align: start;
-}
-
-.sim-card:hover {
-  border-color: var(--border-accent);
-  background: var(--bg-card-hover);
-}
-
-.sim-badge {
-  display: inline-block;
-  background: var(--glow-blue);
-  color: var(--accent-blue);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 10px;
-}
-
-.sim-teams {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.team {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.score {
-  font-size: 16px;
-  font-weight: 800;
-  color: var(--accent-orange);
-}
-
-.sim-date {
+.field-label {
   font-size: 12px;
-  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
-.history-empty {
-  color: var(--text-secondary);
-  font-size: 14px;
-  padding: 24px;
-  text-align: center;
-  background: var(--bg-card);
-  border-radius: 12px;
-  border: 1px dashed var(--border-subtle);
+.field-optional {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--subtle);
 }
 
-/* How It Works */
-.how-it-works {
-  padding: 60px 32px 80px;
-  max-width: 1200px;
-  margin: 0 auto;
+.field-input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text);
+  transition: border-color var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
 }
 
-.steps {
+.field-input:focus {
+  outline: none;
+  border-color: var(--text);
+}
+
+.field-input::placeholder {
+  color: var(--subtle);
+}
+
+.field-input option {
+  color: var(--text);
+  background: var(--bg);
+}
+
+.form-footer {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.error-msg {
+  font-size: 13px;
+  color: var(--danger);
+}
+
+/* ── Recent Sims ── */
+.empty-state {
+  font-size: 14px;
+  color: var(--muted);
+  padding: 32px;
+  text-align: center;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+
+.sim-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.sim-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 16px 24px;
+  background: var(--bg);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition);
+  font-family: var(--font-body);
+}
+
+.sim-item:last-child {
+  border-bottom: none;
+}
+
+.sim-item:hover {
+  background: var(--surface);
+}
+
+.sim-sport {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  min-width: 80px;
+}
+
+.sim-match {
+  flex: 1;
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
 
+.sim-team {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.sim-score {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+
+.sim-date {
+  font-size: 13px;
+  color: var(--subtle);
+}
+
+/* ── How It Works ── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
 .step {
-  flex: 1;
-  max-width: 220px;
-  text-align: center;
-  padding: 24px 16px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  transition: all 0.3s;
+  background: var(--bg);
+  padding: 32px 24px;
+  transition: background var(--transition);
 }
 
 .step:hover {
-  border-color: var(--border-accent);
-  transform: translateY(-4px);
+  background: var(--surface);
+}
+
+.step-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  margin-bottom: 16px;
 }
 
 .step-icon {
-  width: 40px;
-  height: 40px;
-  margin: 0 auto 14px;
-  color: var(--accent-blue);
+  width: 28px;
+  height: 28px;
+  color: var(--subtle);
+  margin-bottom: 16px;
 }
 
 .step-icon svg {
@@ -879,92 +812,98 @@ onMounted(async () => {
   height: 100%;
 }
 
-.step h3 {
-  font-size: 15px;
+.step-title {
+  font-family: var(--font-display);
+  font-size: 17px;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   margin-bottom: 8px;
 }
 
-.step p {
+.step-desc {
   font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
+  color: var(--muted);
+  line-height: 1.6;
 }
 
-.step-arrow {
-  color: var(--text-secondary);
-  font-size: 20px;
-  padding-top: 36px;
+/* ── Footer ── */
+.footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 0;
 }
 
-/* Responsive */
+.footer .container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--text);
+}
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--subtle);
+  flex: 1;
+}
+
+.footer-link {
+  font-size: 13px;
+  color: var(--muted);
+  transition: color var(--transition);
+}
+
+.footer-link:hover {
+  color: var(--text);
+}
+
+/* ── Responsive ── */
 @media (max-width: 960px) {
-  .top-nav {
-    flex-direction: column;
-    gap: 12px;
-    padding: 16px 20px;
-  }
+  .nav-tag { display: none; }
 
-  .nav-tagline {
-    display: none;
-  }
-
-  .hero {
-    padding: 48px 20px 40px;
-  }
-
-  .hero-stats {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .stat-divider {
-    width: 48px;
-    height: 1px;
-  }
-
-  .sport-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .form-row {
+  .sport-grid {
     grid-template-columns: 1fr;
   }
 
   .steps {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .step-arrow {
-    transform: rotate(90deg);
-    padding: 0;
-  }
-
-  .step {
-    max-width: 100%;
+  .stats-row {
+    gap: 24px;
   }
 }
 
 @media (max-width: 640px) {
-  .hero-headline {
-    font-size: 28px;
+  .container { padding: 0 20px; }
+  .nav-inner { padding: 0 20px; }
+
+  .hero { padding: 64px 0 48px; }
+  .section { padding: 48px 0; }
+
+  .headline { font-size: 42px; }
+
+  .form-row { grid-template-columns: 1fr; }
+
+  .steps { grid-template-columns: 1fr; }
+
+  .stats-row {
+    flex-wrap: wrap;
+    gap: 20px;
   }
 
-  .hero-sub {
-    font-size: 15px;
-  }
+  .stat-sep { display: none; }
 
-  .stat-number {
-    font-size: 32px;
-  }
-
-  .sport-grid,
-  .sim-form,
-  .recent-sims,
-  .how-it-works {
-    padding-left: 16px;
-    padding-right: 16px;
+  .footer .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 }
 </style>
