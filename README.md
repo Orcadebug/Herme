@@ -289,7 +289,7 @@ Hermes/
 
 ## Acknowledgments
 
-We would like to sincerely thank **[MiroFish](https://github.com/666ghj/Hermes)** for inspiring this project. Their vision of a concise and versatile group intelligence engine laid the foundation for Hermes.
+We would like to sincerely thank **[MiroFish](https://github.com/666ghj/MiroFish)** for inspiring this project. Their vision of a concise and versatile group intelligence engine laid the foundation for Hermes.
 
 ## License
 
