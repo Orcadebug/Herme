@@ -58,7 +58,7 @@ def create_app(config_class=Config):
             logger.info("Simulation process cleanup function registered")
     except ModuleNotFoundError as exc:
         disabled_components.append(f"simulation_cleanup:{exc.name}")
-        logger.warning("跳过模拟进程清理注册，缺少依赖: %s", exc.name)
+        logger.warning(": %s", exc.name)
 
     # Request logging middleware
     @app.before_request
@@ -82,7 +82,7 @@ def create_app(config_class=Config):
 
     app.config["DISABLED_COMPONENTS"] = disabled_components
 
-    # 健康检查
+    #
     @app.route("/health")
     def health():
         return {
@@ -92,6 +92,6 @@ def create_app(config_class=Config):
         }
 
     if should_log_startup:
-        logger.info("Hermes Backend 启动完成")
+        logger.info("Hermes Backend ")
 
     return app

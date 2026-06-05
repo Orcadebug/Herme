@@ -332,7 +332,7 @@ class AgentInterview:
                 clean_quote = clean_quote.replace("\u300c", "").replace("\u300d", "")
                 clean_quote = clean_quote.strip()
                 # Remove leading punctuation
-                while clean_quote and clean_quote[0] in "，,；;：:、。！？\n\r\t ":
+                while clean_quote and clean_quote[0] in ",;:\n\r\t ":
                     clean_quote = clean_quote[1:]
                 # Filter out garbage content with question numbers (Question 1-9)
                 skip = False
@@ -605,7 +605,7 @@ class ZepToolsService:
         query_lower = query.lower()
         keywords = [
             w.strip()
-            for w in query_lower.replace(",", " ").replace("，", " ").split()
+            for w in query_lower.replace(",", " ").replace("", " ").split()
             if len(w.strip()) > 1
         ]
 
@@ -1067,7 +1067,7 @@ class ZepToolsService:
                 if target_uuid:
                     entity_uuids.add(target_uuid)
 
-        # Get details of all related entities（不Limit quantity，完整输出）
+        # Get details of all related entitiesLimit quantity
         entity_insights = []
         node_map = {}  # Used for subsequent relationship chain building
 
@@ -1080,7 +1080,7 @@ class ZepToolsService:
                 if node:
                     node_map[uuid] = node
                     entity_type = next(
-                        (l for l in node.labels if l not in ["Entity", "Node"]), "实体"
+                        (l for l in node.labels if l not in ["Entity", "Node"]), ""
                     )
 
                     # Get all facts related to this entity (no truncation)
@@ -1104,7 +1104,7 @@ class ZepToolsService:
         result.entity_insights = entity_insights
         result.total_entities = len(entity_insights)
 
-        # Step 4: Build all relationship chains（不Limit quantity）
+        # Step 4: Build all relationship chainsLimit quantity
         relationship_chains = []
         for edge_data in all_edges:  # Process all edges, no truncation
             if isinstance(edge_data, dict):
@@ -1161,7 +1161,7 @@ Requirements:
         user_prompt = f"""Simulation requirement background:
 {simulation_requirement}
 
-{f"报告上下文：{report_context[:500]}" if report_context else ""}
+{f"{report_context[:500]}" if report_context else ""}
 
 Please decompose the following question into{max_queries}sub-questions:
 {query}
@@ -1178,7 +1178,7 @@ Return a JSON-formatted list of sub-questions."""
             )
 
             sub_queries = response.get("sub_queries", [])
-            # 确保是字符串列表
+            #
             return [str(sq) for sq in sub_queries[:max_queries]]
 
         except Exception as e:
@@ -1251,8 +1251,8 @@ Return a JSON-formatted list of sub-questions."""
 
             if is_historical:
                 # Historical/expired facts, add time markers
-                valid_at = edge.valid_at or "未知"
-                invalid_at = edge.invalid_at or edge.expired_at or "未知"
+                valid_at = edge.valid_at or ""
+                invalid_at = edge.invalid_at or edge.expired_at or ""
                 fact_with_time = f"[{valid_at} - {invalid_at}] {edge.fact}"
                 historical_facts.append(fact_with_time)
             else:
@@ -1263,7 +1263,7 @@ Return a JSON-formatted list of sub-questions."""
         query_lower = query.lower()
         keywords = [
             w.strip()
-            for w in query_lower.replace(",", " ").replace("，", " ").split()
+            for w in query_lower.replace(",", " ").replace("", " ").split()
             if len(w.strip()) > 1
         ]
 
@@ -1277,7 +1277,7 @@ Return a JSON-formatted list of sub-questions."""
                     score += 10
             return score
 
-        # 排序并Limit quantity
+        # Limit quantity
         active_facts.sort(key=relevance_score, reverse=True)
         historical_facts.sort(key=relevance_score, reverse=True)
 
@@ -1306,11 +1306,11 @@ Return a JSON-formatted list of sub-questions."""
 
         Args:
             graph_id: Graph ID
-            query: 搜索查询
-            limit: 返回结果数量
+            query:
+            limit:
 
         Returns:
-            SearchResult: 搜索结果
+            SearchResult:
         """
         logger.info(t("console.quickSearchStart", query=query[:50]))
 
@@ -1331,31 +1331,31 @@ Return a JSON-formatted list of sub-questions."""
         custom_questions: List[str] = None,
     ) -> InterviewResult:
         """
-        【InterviewAgents - 深度采访】
+        InterviewAgents -
 
-        调用真实的OASIS采访API，采访模拟中正在运行的Agent：
-        1. 自动读取人设文件，了解所有模拟Agent
-        2. 使用LLM分析采访需求，智能选择最相关的Agent
-        3. 使用LLM生成采访问题
-        4. 调用 /api/simulation/interview/batch 接口进行真实采访（双平台同时采访）
-        5. 整合所有采访结果，生成采访报告
+        OASISAPIAgent
+        1. Agent
+        2. LLMAgent
+        3. LLM
+        4.  /api/simulation/interview/batch
+        5.
 
-        【重要】此功能需要模拟环境处于运行状态（OASIS环境未关闭）
+        OASIS
 
-        【使用场景】
-        - 需要从不同角色视角了解事件看法
-        - 需要收集多方意见和观点
-        - 需要获取模拟Agent的真实回答（非LLM模拟）
+
+        -
+        -
+        - AgentLLM
 
         Args:
-            simulation_id: 模拟ID（用于定位人设文件和调用采访API）
-            interview_requirement: 采访需求描述（非结构化，如"了解学生对事件的看法"）
-            simulation_requirement: 模拟需求背景（可选）
-            max_agents: 最多采访的Agent数量
-            custom_questions: 自定义采访问题（可选，若不提供则自动生成）
+            simulation_id: IDAPI
+            interview_requirement: ""
+            simulation_requirement:
+            max_agents: Agent
+            custom_questions:
 
         Returns:
-            InterviewResult: 采访结果
+            InterviewResult:
         """
         from .simulation_runner import SimulationRunner
 
@@ -1368,18 +1368,18 @@ Return a JSON-formatted list of sub-questions."""
             interview_questions=custom_questions or [],
         )
 
-        # Step 1: 读取人设文件
+        # Step 1:
         profiles = self._load_agent_profiles(simulation_id)
 
         if not profiles:
             logger.warning(t("console.profilesNotFound", simId=simulation_id))
-            result.summary = "未找到可采访的Agent人设文件"
+            result.summary = "Agent"
             return result
 
         result.total_agents = len(profiles)
         logger.info(t("console.loadedProfiles", count=len(profiles)))
 
-        # Step 2: 使用LLM选择要采访的Agent（返回agent_id列表）
+        # Step 2: LLMAgentagent_id
         selected_agents, selected_indices, selection_reasoning = (
             self._select_agents_for_interview(
                 profiles=profiles,
@@ -1399,7 +1399,7 @@ Return a JSON-formatted list of sub-questions."""
             )
         )
 
-        # Step 3: 生成采访问题（如果没有提供）
+        # Step 3:
         if not result.interview_questions:
             result.interview_questions = self._generate_interview_questions(
                 interview_requirement=interview_requirement,
@@ -1413,35 +1413,35 @@ Return a JSON-formatted list of sub-questions."""
                 )
             )
 
-        # 将问题合并为一个采访prompt
+        # prompt
         combined_prompt = "\n".join(
             [f"{i + 1}. {q}" for i, q in enumerate(result.interview_questions)]
         )
 
-        # 添加优化前缀，约束Agent回复格式
+        # Agent
         INTERVIEW_PROMPT_PREFIX = (
-            "你正在接受一次采访。请结合你的人设、所有的过往记忆与行动，"
-            "以纯文本方式直接回答以下问题。\n"
-            "回复Requirements:\n"
-            "1. 直接用自然语言回答，不要调用任何工具\n"
-            "2. 不要返回JSON格式或工具调用格式\n"
-            "3. 不要使用Markdown标题（如#、##、###）\n"
-            "4. 按问题编号逐一回答，每个回答以「问题X：」开头（X为问题编号）\n"
-            "5. 每个问题的回答之间用空行分隔\n"
-            "6. 回答要有实质内容，每个问题至少回答2-3句话\n\n"
+            ""
+            "\n"
+            "Requirements:\n"
+            "1. \n"
+            "2. JSON\n"
+            "3. Markdown######\n"
+            "4. XX\n"
+            "5. \n"
+            "6. 2-3\n\n"
         )
         optimized_prompt = f"{INTERVIEW_PROMPT_PREFIX}{combined_prompt}"
 
-        # Step 4: 调用真实的采访API（不指定platform，默认双平台同时采访）
+        # Step 4: APIplatform
         try:
-            # 构建批量采访列表（不指定platform，双平台采访）
+            # platform
             interviews_request = []
             for agent_idx in selected_indices:
                 interviews_request.append(
                     {
                         "agent_id": agent_idx,
-                        "prompt": optimized_prompt,  # 使用优化后的prompt
-                        # 不指定platform，API会在twitter和reddit两个平台都采访
+                        "prompt": optimized_prompt,  # prompt
+                        # platformAPItwitterreddit
                     }
                 )
 
@@ -1449,12 +1449,12 @@ Return a JSON-formatted list of sub-questions."""
                 t("console.callingBatchInterviewApi", count=len(interviews_request))
             )
 
-            # 调用 SimulationRunner 的批量采访方法（不传platform，双平台采访）
+            #  SimulationRunner platform
             api_result = SimulationRunner.interview_agents_batch(
                 simulation_id=simulation_id,
                 interviews=interviews_request,
-                platform=None,  # 不指定platform，双平台采访
-                timeout=180.0,  # 双平台需要更长超时
+                platform=None,  # platform
+                timeout=180.0,  #
             )
 
             logger.info(
@@ -1465,19 +1465,19 @@ Return a JSON-formatted list of sub-questions."""
                 )
             )
 
-            # 检查API调用是否成功
+            # API
             if not api_result.get("success", False):
-                error_msg = api_result.get("error", "未知错误")
+                error_msg = api_result.get("error", "")
                 logger.warning(
                     t("console.interviewApiReturnedFailure", error=error_msg)
                 )
                 result.summary = (
-                    f"采访API调用failed：{error_msg}。请检查OASIS模拟环境状态。"
+                    f"APIfailed{error_msg}OASIS"
                 )
                 return result
 
-            # Step 5: 解析API返回结果，构建AgentInterview对象
-            # 双平台模式返回格式: {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
+            # Step 5: APIAgentInterview
+            # : {"twitter_0": {...}, "reddit_0": {...}, "twitter_1": {...}, ...}
             api_data = api_result.get("result", {})
             results_dict = (
                 api_data.get("results", {}) if isinstance(api_data, dict) else {}
@@ -1488,54 +1488,54 @@ Return a JSON-formatted list of sub-questions."""
                 agent_name = agent.get(
                     "realname", agent.get("username", f"Agent_{agent_idx}")
                 )
-                agent_role = agent.get("profession", "未知")
+                agent_role = agent.get("profession", "")
                 agent_bio = agent.get("bio", "")
 
-                # 获取该Agent在两个平台的采访结果
+                # Agent
                 twitter_result = results_dict.get(f"twitter_{agent_idx}", {})
                 reddit_result = results_dict.get(f"reddit_{agent_idx}", {})
 
                 twitter_response = twitter_result.get("response", "")
                 reddit_response = reddit_result.get("response", "")
 
-                # 清理可能的工具调用 JSON 包裹
+                #  JSON
                 twitter_response = self._clean_tool_call_response(twitter_response)
                 reddit_response = self._clean_tool_call_response(reddit_response)
 
-                # 始终输出双平台标记
+                #
                 twitter_text = (
-                    twitter_response if twitter_response else "（该平台未获得回复）"
+                    twitter_response if twitter_response else ""
                 )
                 reddit_text = (
-                    reddit_response if reddit_response else "（该平台未获得回复）"
+                    reddit_response if reddit_response else ""
                 )
-                response_text = f"【Twitter平台回答】\n{twitter_text}\n\n【Reddit平台回答】\n{reddit_text}"
+                response_text = f"Twitter\n{twitter_text}\n\nReddit\n{reddit_text}"
 
-                # 提取关键引言（从两个平台的回答中）
+                #
                 import re
 
                 combined_responses = f"{twitter_response} {reddit_response}"
 
-                # 清理响应文本：去掉标记、编号、Markdown 等干扰
+                # Markdown
                 clean_text = re.sub(r"#{1,6}\s+", "", combined_responses)
                 clean_text = re.sub(r"\{[^}]*tool_name[^}]*\}", "", clean_text)
                 clean_text = re.sub(r"[*_`|>~\-]{2,}", "", clean_text)
-                clean_text = re.sub(r"问题\d+[：:]\s*", "", clean_text)
-                clean_text = re.sub(r"【[^】]+】", "", clean_text)
+                clean_text = re.sub(r"\d+[:]\s*", "", clean_text)
+                clean_text = re.sub(r"[^]+", "", clean_text)
 
-                # 策略1（主）: 提取完整的有实质内容的句子
-                sentences = re.split(r"[。！？]", clean_text)
+                # 1:
+                sentences = re.split(r"[]", clean_text)
                 meaningful = [
                     s.strip()
                     for s in sentences
                     if 20 <= len(s.strip()) <= 150
-                    and not re.match(r"^[\s\W，,；;：:、]+", s.strip())
-                    and not s.strip().startswith(("{", "问题"))
+                    and not re.match(r"^[\s\W,;:]+", s.strip())
+                    and not s.strip().startswith(("{", ""))
                 ]
                 meaningful.sort(key=len, reverse=True)
-                key_quotes = [s + "。" for s in meaningful[:3]]
+                key_quotes = [s + "" for s in meaningful[:3]]
 
-                # 策略2（补充）: 正确配对的中文引号「」内长文本
+                # 2:
                 if not key_quotes:
                     paired = re.findall(
                         r"\u201c([^\u201c\u201d]{15,100})\u201d", clean_text
@@ -1544,13 +1544,13 @@ Return a JSON-formatted list of sub-questions."""
                         r"\u300c([^\u300c\u300d]{15,100})\u300d", clean_text
                     )
                     key_quotes = [
-                        q for q in paired if not re.match(r"^[，,；;：:、]", q)
+                        q for q in paired if not re.match(r"^[,;:]", q)
                     ][:3]
 
                 interview = AgentInterview(
                     agent_name=agent_name,
                     agent_role=agent_role,
-                    agent_bio=agent_bio[:1000],  # 扩大bio长度限制
+                    agent_bio=agent_bio[:1000],  # bio
                     question=combined_prompt,
                     response=response_text,
                     key_quotes=key_quotes[:5],
@@ -1560,10 +1560,10 @@ Return a JSON-formatted list of sub-questions."""
             result.interviewed_count = len(result.interviews)
 
         except ValueError as e:
-            # 模拟环境未运行
+            #
             logger.warning(t("console.interviewApiCallFailed", error=e))
             result.summary = (
-                f"采访failed：{str(e)}。模拟环境可能已关闭，请确保OASIS环境正在运行。"
+                f"failed{str(e)}OASIS"
             )
             return result
         except Exception as e:
@@ -1571,10 +1571,10 @@ Return a JSON-formatted list of sub-questions."""
             import traceback
 
             logger.error(traceback.format_exc())
-            result.summary = f"采访过程发生错误：{str(e)}"
+            result.summary = f"{str(e)}"
             return result
 
-        # Step 6: 生成采访摘要
+        # Step 6:
         if result.interviews:
             result.summary = self._generate_interview_summary(
                 interviews=result.interviews,
@@ -1588,7 +1588,7 @@ Return a JSON-formatted list of sub-questions."""
 
     @staticmethod
     def _clean_tool_call_response(response: str) -> str:
-        """清理 Agent 回复中的 JSON 工具调用包裹，提取实际内容"""
+        """ Agent  JSON """
         if not response or not response.strip().startswith("{"):
             return response
         text = response.strip()
@@ -1609,18 +1609,18 @@ Return a JSON-formatted list of sub-questions."""
         return response
 
     def _load_agent_profiles(self, simulation_id: str) -> List[Dict[str, Any]]:
-        """加载模拟的Agent人设文件"""
+        """Agent"""
         import os
         import csv
 
-        # 构建人设文件路径
+        #
         sim_dir = os.path.join(
             os.path.dirname(__file__), f"../../uploads/simulations/{simulation_id}"
         )
 
         profiles = []
 
-        # 优先尝试读取Reddit JSON格式
+        # Reddit JSON
         reddit_profile_path = os.path.join(sim_dir, "reddit_profiles.json")
         if os.path.exists(reddit_profile_path):
             try:
@@ -1631,21 +1631,21 @@ Return a JSON-formatted list of sub-questions."""
             except Exception as e:
                 logger.warning(t("console.readRedditProfilesFailed", error=e))
 
-        # 尝试读取Twitter CSV格式
+        # Twitter CSV
         twitter_profile_path = os.path.join(sim_dir, "twitter_profiles.csv")
         if os.path.exists(twitter_profile_path):
             try:
                 with open(twitter_profile_path, "r", encoding="utf-8") as f:
                     reader = csv.DictReader(f)
                     for row in reader:
-                        # CSV格式转换为统一格式
+                        # CSV
                         profiles.append(
                             {
                                 "realname": row.get("name", ""),
                                 "username": row.get("username", ""),
                                 "bio": row.get("description", ""),
                                 "persona": row.get("user_char", ""),
-                                "profession": "未知",
+                                "profession": "",
                             }
                         )
                 logger.info(t("console.loadedTwitterProfiles", count=len(profiles)))
@@ -1663,51 +1663,51 @@ Return a JSON-formatted list of sub-questions."""
         max_agents: int,
     ) -> tuple:
         """
-        使用LLM选择要采访的Agent
+        LLMAgent
 
         Returns:
             tuple: (selected_agents, selected_indices, reasoning)
-                - selected_agents: 选中Agent的完整信息列表
-                - selected_indices: 选中Agent的索引列表（用于API调用）
-                - reasoning: 选择理由
+                - selected_agents: Agent
+                - selected_indices: AgentAPI
+                - reasoning:
         """
 
-        # 构建Agent摘要列表
+        # Agent
         agent_summaries = []
         for i, profile in enumerate(profiles):
             summary = {
                 "index": i,
                 "name": profile.get("realname", profile.get("username", f"Agent_{i}")),
-                "profession": profile.get("profession", "未知"),
+                "profession": profile.get("profession", ""),
                 "bio": profile.get("bio", "")[:200],
                 "interested_topics": profile.get("interested_topics", []),
             }
             agent_summaries.append(summary)
 
-        system_prompt = """你是一个专业的采访策划专家。你的任务是根据采访需求，从模拟Agent列表中选择最适合采访的对象。
+        system_prompt = """Agent
 
-选择标准：
-1. Agent的身份/职业与采访主题相关
-2. Agent可能持有独特或有价值的观点
-3. 选择多样化的视角（如：支持方、反对方、中立方、专业人士等）
-4. 优先选择与事件直接相关的角色
 
-返回JSON格式：
+1. Agent/
+2. Agent
+3.
+4.
+
+JSON
 {
-    "selected_indices": [选中Agent的索引列表],
-    "reasoning": "选择理由说明"
+    "selected_indices": [Agent],
+    "reasoning": ""
 }"""
 
-        user_prompt = f"""采访需求：
+        user_prompt = f"""
 {interview_requirement}
 
-模拟背景：
-{simulation_requirement if simulation_requirement else "未提供"}
 
-可选择的Agent列表（共{len(agent_summaries)}个）：
+{simulation_requirement if simulation_requirement else ""}
+
+Agent{len(agent_summaries)}
 {json.dumps(agent_summaries, ensure_ascii=False, indent=2)}
 
-请选择最多{max_agents}个最适合采访的Agent，并说明选择理由。"""
+{max_agents}Agent"""
 
         try:
             response = self.llm.chat_json(
@@ -1719,9 +1719,9 @@ Return a JSON-formatted list of sub-questions."""
             )
 
             selected_indices = response.get("selected_indices", [])[:max_agents]
-            reasoning = response.get("reasoning", "基于相关性自动选择")
+            reasoning = response.get("reasoning", "")
 
-            # 获取选中的Agent完整信息
+            # Agent
             selected_agents = []
             valid_indices = []
             for idx in selected_indices:
@@ -1733,10 +1733,10 @@ Return a JSON-formatted list of sub-questions."""
 
         except Exception as e:
             logger.warning(t("console.llmSelectAgentFailed", error=e))
-            # 降级：选择前N个
+            # N
             selected = profiles[:max_agents]
             indices = list(range(min(max_agents, len(profiles))))
-            return selected, indices, "使用默认选择策略"
+            return selected, indices, ""
 
     def _generate_interview_questions(
         self,
@@ -1744,29 +1744,29 @@ Return a JSON-formatted list of sub-questions."""
         simulation_requirement: str,
         selected_agents: List[Dict[str, Any]],
     ) -> List[str]:
-        """使用LLM生成采访问题"""
+        """LLM"""
 
-        agent_roles = [a.get("profession", "未知") for a in selected_agents]
+        agent_roles = [a.get("profession", "") for a in selected_agents]
 
-        system_prompt = """你是一个专业的记者/采访者。根据采访需求，生成3-5个深度采访问题。
+        system_prompt = """/3-5
 
-问题Requirements:
-1. 开放性问题，鼓励详细回答
-2. 针对不同角色可能有不同答案
-3. 涵盖事实、观点、感受等多个维度
-4. 语言自然，像真实采访一样
-5. 每个问题控制在50字以内，简洁明了
-6. 直接提问，不要包含背景说明或前缀
+Requirements:
+1.
+2.
+3.
+4.
+5. 50
+6.
 
-返回JSON格式：{"questions": ["问题1", "问题2", ...]}"""
+JSON{"questions": ["1", "2", ...]}"""
 
-        user_prompt = f"""采访需求：{interview_requirement}
+        user_prompt = f"""{interview_requirement}
 
-模拟背景：{simulation_requirement if simulation_requirement else "未提供"}
+{simulation_requirement if simulation_requirement else ""}
 
-采访对象角色：{", ".join(agent_roles)}
+{", ".join(agent_roles)}
 
-请生成3-5个采访问题。"""
+3-5"""
 
         try:
             response = self.llm.chat_json(
@@ -1778,59 +1778,59 @@ Return a JSON-formatted list of sub-questions."""
             )
 
             return response.get(
-                "questions", [f"关于{interview_requirement}，您有什么看法？"]
+                "questions", [f"{interview_requirement}"]
             )
 
         except Exception as e:
             logger.warning(t("console.generateInterviewQuestionsFailed", error=e))
             return [
-                f"关于{interview_requirement}，您的观点是什么？",
-                "这件事对您或您所代表的群体有什么影响？",
-                "您认为应该如何解决或改进这个问题？",
+                f"{interview_requirement}",
+                "",
+                "",
             ]
 
     def _generate_interview_summary(
         self, interviews: List[AgentInterview], interview_requirement: str
     ) -> str:
-        """生成采访摘要"""
+        """"""
 
         if not interviews:
-            return "未完成任何采访"
+            return ""
 
-        # 收集所有采访内容
+        #
         interview_texts = []
         for interview in interviews:
             interview_texts.append(
-                f"【{interview.agent_name}（{interview.agent_role}）】\n{interview.response[:500]}"
+                f"{interview.agent_name}{interview.agent_role}\n{interview.response[:500]}"
             )
 
         quote_instruction = (
-            "引用受访者原话时使用中文引号「」"
+            ""
             if get_locale() == "zh"
             else 'Use quotation marks "" when quoting interviewees'
         )
-        system_prompt = f"""你是一个专业的新闻编辑。请根据多位受访者的回答，生成一份采访摘要。
+        system_prompt = f"""
 
-摘要Requirements:
-1. 提炼各方主要观点
-2. 指出观点的共识和分歧
-3. 突出有价值的引言
-4. 客观中立，不偏袒任何一方
-5. 控制在1000字内
+Requirements:
+1.
+2.
+3.
+4.
+5. 1000
 
-格式约束（必须遵守）：
-- 使用纯文本段落，用空行分隔不同部分
-- 不要使用Markdown标题（如#、##、###）
-- 不要使用分割线（如---、***）
+
+-
+- Markdown######
+- ---***
 - {quote_instruction}
-- 可以使用**加粗**标记关键词，但不要使用其他Markdown语法"""
+- ****Markdown"""
 
-        user_prompt = f"""采访主题：{interview_requirement}
+        user_prompt = f"""{interview_requirement}
 
-采访内容：
+
 {"".join(interview_texts)}
 
-请生成采访摘要。"""
+"""
 
         try:
             summary = self.llm.chat(
@@ -1845,7 +1845,7 @@ Return a JSON-formatted list of sub-questions."""
 
         except Exception as e:
             logger.warning(t("console.generateInterviewSummaryFailed", error=e))
-            # 降级：简单拼接
-            return f"共采访了{len(interviews)}位受访者，包括：" + "、".join(
+            #
+            return f"{len(interviews)}" + "".join(
                 [i.agent_name for i in interviews]
             )

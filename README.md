@@ -289,7 +289,7 @@ Tserriednich/
 
 ## Acknowledgments
 
-We would like to sincerely thank **[MiroFish](https://github.com/666ghj/MiroFish)** for inspiring this project. Their vision of a concise and versatile group intelligence engine laid the foundation for Tserriednich.
+Credit and thanks go to **[Mirofish](https://github.com/666ghj/MiroFish)** for the original inspiration and foundation behind this project. See [NOTICE](./NOTICE) for the project attribution notice.
 
 ## License
 
