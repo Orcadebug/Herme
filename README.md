@@ -1,6 +1,6 @@
 <div align="center">
 
-# HERMES
+# Tserriednich
 
 **Simulate Any Game. Every Player. Every Play.**
 
@@ -10,11 +10,11 @@ A multi-agent sports simulation engine powered by AI agents with live research d
 
 ## Overview
 
-**Hermes** is a sports-first multi-agent simulation engine. It uses AI agents — each with unique personalities, playstyles, and tactical preferences — to simulate full games play-by-play. Every player, coach, referee, fan, and commentator acts autonomously, producing realistic game outcomes and rich narrative content.
+**Tserriednich** is a sports-first multi-agent simulation engine. It uses AI agents — each with unique personalities, playstyles, and tactical preferences — to simulate full games play-by-play. Every player, coach, referee, fan, and commentator acts autonomously, producing realistic game outcomes and rich narrative content.
 
 > **You provide:** Two team names and a sport.
 >
-> **Hermes returns:** A full game simulation with play-by-play action, live fan reactions, post-game analysis, and the ability to chat with any participant.
+> **Tserriednich returns:** A full game simulation with play-by-play action, live fan reactions, post-game analysis, and the ability to chat with any participant.
 
 ### Use Cases
 
@@ -26,7 +26,7 @@ A multi-agent sports simulation engine powered by AI agents with live research d
 
 ## How It Works
 
-Hermes runs a multi-stage pipeline that goes from team research to interactive game simulation:
+Tserriednich runs a multi-stage pipeline that goes from team research to interactive game simulation:
 
 ```
 Team Names ──► Live Research ──► Agent Profiles ──► Game Simulation ──► Reactions & Analysis
@@ -35,7 +35,7 @@ Team Names ──► Live Research ──► Agent Profiles ──► Game Simul
 ### Stage 1: Live Team Research (Perplexity)
 
 1. Enter home and away team names, select a sport
-2. Hermes uses **Perplexity** to research live web data for each team:
+2. Tserriednich uses **Perplexity** to research live web data for each team:
    - Current roster with player positions and stats
    - Head coach identity and tactical tendencies
    - Team description, recent performance, league context
@@ -43,7 +43,7 @@ Team Names ──► Live Research ──► Agent Profiles ──► Game Simul
 
 ### Stage 2: Agent Profile Generation
 
-For each researched person, Hermes generates a detailed AI agent profile:
+For each researched person, Tserriednich generates a detailed AI agent profile:
 
 - **Player Agents**: Archetype (lead guard, rim big, wing scorer, etc.), usage band, shot profile, defense style, stamina, decision style, hot/cold tendencies, preferred court zones
 - **Coach Agents**: Pace preference, rotation style, offensive families (spread PnR, horns, motion), defensive coverages (man, switch, drop, zone), timeout and foul management
@@ -65,7 +65,7 @@ The basketball multi-agent engine runs the game with full autonomy:
 
 ### Stage 4: Live Reactions & Commentary
 
-During the simulation, Hermes generates real-time content:
+During the simulation, Tserriednich generates real-time content:
 
 - **Fan Reactions**: Twitter-style posts from 30 diverse fan agents with sentiment analysis
 - **Commentary**: Play-by-play calls and color analysis for key events
@@ -73,7 +73,7 @@ During the simulation, Hermes generates real-time content:
 
 ### Stage 5: Post-Game Analysis
 
-After the game completes, Hermes generates:
+After the game completes, Tserriednich generates:
 
 - **Full Box Score**: Player stats with performance grades (A-F)
 - **Coach Press Conference**: Quotes from both head coaches
@@ -237,7 +237,7 @@ Reads `.env` from root directory, maps ports `3000` (frontend) and `5001` (backe
 ## Project Structure
 
 ```
-Hermes/
+Tserriednich/
 ├── backend/
 │   ├── run.py                        # Flask entry point
 │   ├── app/
@@ -289,7 +289,7 @@ Hermes/
 
 ## Acknowledgments
 
-We would like to sincerely thank **[MiroFish](https://github.com/666ghj/MiroFish)** for inspiring this project. Their vision of a concise and versatile group intelligence engine laid the foundation for Hermes.
+We would like to sincerely thank **[MiroFish](https://github.com/666ghj/MiroFish)** for inspiring this project. Their vision of a concise and versatile group intelligence engine laid the foundation for Tserriednich.
 
 ## License
 
