@@ -3,7 +3,7 @@ name = "hermes-backend"
 version = "0.1.0"
 description = "Hermes - A concise and general swarm intelligence engine that predicts everything"
 requires-python = ">=3.11"
-license = { text = "AGPL-3.0" }
+license = { text = "MIT" }
 authors = [
     { name = "Hermes Team" }
 ]
@@ -12,23 +12,23 @@ dependencies = [
     # Core framework
     "flask>=3.0.0",
     "flask-cors>=6.0.0",
-    
+
     # LLM related
     "openai>=1.0.0",
-    
+
     # Zep Cloud
     "zep-cloud==3.13.0",
-    
+
     # OASIS social media simulation
     "camel-oasis==0.2.5",
     "camel-ai==0.2.78",
-    
+
     # File processing
     "PyMuPDF>=1.24.0",
     # Encoding detection (supports text files with non-UTF-8 encoding)
     "charset-normalizer>=3.0.0",
     "chardet>=5.0.0",
-    
+
     # Utility libraries
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",

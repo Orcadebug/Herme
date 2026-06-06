@@ -1,6 +1,6 @@
 """
-LLM客户端封装
-统一使用OpenAI格式调用
+LLM
+OpenAI
 """
 
 import json
@@ -12,8 +12,8 @@ from ..config import Config
 
 
 class LLMClient:
-    """LLM客户端"""
-    
+    """LLM"""
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -23,15 +23,15 @@ class LLMClient:
         self.api_key = api_key or Config.LLM_API_KEY
         self.base_url = base_url or Config.LLM_BASE_URL
         self.model = model or Config.LLM_MODEL_NAME
-        
+
         if not self.api_key:
-            raise ValueError("LLM_API_KEY 未配置")
-        
+            raise ValueError("LLM_API_KEY ")
+
         self.client = OpenAI(
             api_key=self.api_key,
             base_url=self.base_url
         )
-    
+
     def chat(
         self,
         messages: List[Dict[str, str]],
@@ -40,16 +40,16 @@ class LLMClient:
         response_format: Optional[Dict] = None
     ) -> str:
         """
-        发送聊天请求
-        
+
+
         Args:
-            messages: 消息列表
-            temperature: 温度参数
-            max_tokens: 最大token数
-            response_format: 响应格式（如JSON模式）
-            
+            messages:
+            temperature:
+            max_tokens: token
+            response_format: JSON
+
         Returns:
-            模型响应文本
+
         """
         kwargs = {
             "model": self.model,
@@ -57,13 +57,13 @@ class LLMClient:
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
-        
+
         if response_format:
             kwargs["response_format"] = response_format
-        
+
         response = self.client.chat.completions.create(**kwargs)
         content = response.choices[0].message.content
-        # 部分模型（如MiniMax M2.5）会在content中包含<think>思考内容，需要移除
+        # MiniMax M2.5content<think>
         content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
         return content
 
@@ -80,7 +80,7 @@ class LLMClient:
 
         start = cleaned_response.find('{')
         if start == -1:
-            raise ValueError(f"LLM返回的JSON格式无效: {cleaned_response}")
+            raise ValueError(f"LLMJSON: {cleaned_response}")
 
         depth = 0
         in_string = False
@@ -107,10 +107,10 @@ class LLMClient:
                     try:
                         return json.loads(candidate)
                     except json.JSONDecodeError as exc:
-                        raise ValueError(f"LLM返回的JSON格式无效: {candidate}") from exc
+                        raise ValueError(f"LLMJSON: {candidate}") from exc
 
-        raise ValueError(f"LLM返回的JSON格式无效: {cleaned_response}")
-    
+        raise ValueError(f"LLMJSON: {cleaned_response}")
+
     def chat_json(
         self,
         messages: List[Dict[str, str]],
@@ -118,15 +118,15 @@ class LLMClient:
         max_tokens: int = 4096
     ) -> Dict[str, Any]:
         """
-        发送聊天请求并返回JSON
-        
+        JSON
+
         Args:
-            messages: 消息列表
-            temperature: 温度参数
-            max_tokens: 最大token数
-            
+            messages:
+            temperature:
+            max_tokens: token
+
         Returns:
-            解析后的JSON对象
+            JSON
         """
         # Perplexity recommends custom JSON parsing even when using OpenAI-compatible clients.
         if self.base_url and 'perplexity.ai' in self.base_url:
